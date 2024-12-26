@@ -1,0 +1,73 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+<div class="modal" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        {% set first_message = messages[0] %}
+                        <h4 class="modal-title">{{ first_message[0] }}</h4>  <!-- Nội dung thông báo lỗi -->
+                    {% else %}
+                        <h4 class="modal-title">Thông báo</h4>  <!-- Tiêu đề mặc định -->
+                    {% endif %}
+                {% endwith %}
+                <a class="text-decoration-none text-light btn-close" href="/login_staff"></a>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        <p>{{ messages[0][1] }}</p>  <!-- Số lượng vé yêu cầu -->
+                    {% else %}
+                        <p>Không có thông báo.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                    <a class="text-decoration-none text-light" href="/login_staff">Đóng</a>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div style="width: 550px; background-color: rgba(240, 248, 255, 0.9); padding: 30px; margin: 100px auto; border-radius: 10px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+    <form action="/login_staff" method="post">
+        <h2 style="color: #0078FF; margin-bottom: 20px;">ĐĂNG NHẬP NHÂN VIÊN</h2>
+
+        <img src="/static/images/staff.jpg" alt="Staff Icon"
+             style="width: 70px; margin-bottom: 20px;">
+
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" name="username" required>
+            <label for="username">Tên đăng nhập</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" placeholder="Mật khẩu" name="password" required>
+            <label for="password">Mật khẩu</label>
+        </div>
+
+        <button type="submit"
+                style="width: 100%; background-color: #0078FF; color: #fff; border: none; border-radius: 5px; padding: 10px; font-size: 1rem; cursor: pointer; margin-top: 15px;">Đăng nhập
+        </button>
+    </form>
+</div>
+<script>
+    window.onload = function() {
+        var myModal = new bootstrap.Modal(document.getElementById('myModal'));
+        {% if get_flashed_messages() %}
+            myModal.show();
+        {% endif %}
+    };
+</script>
+
+{% endblock %}
