@@ -1,11 +1,9 @@
-{% extends 'layout/base.html' %}
+{% extends 'layout/staffbase.html' %}
 
-{% block content %}
-
-
+{% block staffcontent %}
 <div style="width: 1000px; background-color: rgba(240, 248, 255, 0.9); padding: 30px; margin: 100px auto; border-radius: 10px;  box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-    <form action="/payment" method="post" class="d-grid gap-3 px-4">
-        <h1 class="text-center text-primary mt-4 mb-4">XỬ LÍ ĐẶT VÉ</h1>
+    <form class="d-grid gap-3 px-4">
+        <h1 class="text-center text-primary mt-4 mb-4">XỬ LÍ BÁN VÉ</h1>
         <!-- Chuyến bay -->
         <div class="row mb-3">
             <div class="col-12 col-md-4">
@@ -24,7 +22,7 @@
                 <label class="fw-bold fs-5 text-danger">Số ghế trống hạng 1:</label>
             </div>
             <div class="col-12 col-md-8">
-                <input class="form-control form-control-lg" type="text" value="{{first_seats_avail}}" name="first_seats_avail" readonly>
+                <input id="firstSeat"class="form-control form-control-lg" type="text" value="{{first_seats_avail}}" name="first_seats_avail" readonly>
             </div>
         </div>
         <div class="row mb-3">
@@ -32,7 +30,7 @@
                 <label class="fw-bold fs-5 text-danger">Số ghế trống hạng 2:</label>
             </div>
             <div class="col-12 col-md-8">
-                <input class="form-control form-control-lg" type="text" value="{{second_seats_avail}}" name="second_seats_avail" readonly>
+                <input id="secondSeat"class="form-control form-control-lg" type="text" value="{{second_seats_avail}}" name="second_seats_avail" readonly>
             </div>
         </div>
 
@@ -115,50 +113,22 @@
                 <label class="fw-bold fs-5 text-danger">Tên khách hàng:</label>
             </div>
             <div class="col-12 col-md-8">
-                <input class="form-control form-control-lg" type="text" value="{{user.name}}" name="fullname" readonly>
-                <input id="customerid" type="hidden" name="userid" value="{{user.id }}">
+               <select id="customerSelect" class="form-select form-select-lg" name="customerSelect">
+                    {% for c in customers %}
+                    <option {% if loop.index == 1 %}selected{% endif %} value="{{c.id}}">{{c.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
         </div>
-
-        <!-- Email -->
-        <div class="row mb-3">
-            <div class="col-12 col-md-4">
-                <label class="fw-bold fs-5 text-danger">Email:</label>
-            </div>
-            <div class="col-12 col-md-8">
-                <input class="form-control form-control-lg" type="text" value="{{user.email}}" name="email" readonly>
-            </div>
-        </div>
-
-
-        <!-- Thanh toán -->
+        <!-- Bán vé -->
         <hr class="border-3 border-top-3 border-light">
         <div class="row">
             <div class="col-12 d-flex justify-content-center">
-                <input type="submit" value="Tiến hành thanh toán" class="btn" style="background-color: #0078FF; color: white; font-size: 1.25rem; padding: 12px 24px; border: none; border-radius: 5px;"/>
+                <input type="button" value="Bán vé" class="btn" style="background-color: #0078FF; color: white; font-size: 1.25rem; padding: 12px 24px; border: none; border-radius: 5px;"
+                onclick="confirmSell()"/>
             </div>
         </div>
     </form>
 </div>
-
-
-<script src="{{url_for('static',filename='js/bookticket.js')}}"></script>
-
-<script>
-    function handlePayment(){
-        var customer_id = document.getElementById('customerid').value;
-        var flight_id = document.getElementById('flightid').value;
-        var fareclass_id = document.getElementById('fareclassid').value;
-        var quantity = document.getElementById('quantity').innerText;
-        var plane_id = document.getElementById('planeid').value;
-
-        console.log('customer',customer_id);
-        console.log('flight',flight_id);
-        console.log('fareclass',fareclass_id);
-        console.log('quantity',quantity);
-        console.log('plane',plane_id);
-
-        view_ticket_info(flight_id,customer_id,fareclass_id,quantity,plane_id)
-    }
-</script>
+<script src="{{url_for('static',filename='js/ticket.js')}}"></script>
 {% endblock %}

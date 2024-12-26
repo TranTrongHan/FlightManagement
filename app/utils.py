@@ -32,8 +32,6 @@ def get_seat_by_quantity(quantity, flightid, fareclassid=None):
         session['seats'] = seatinfo
         return selected_seats
 
-
-
 def add_ticket(ticket_info):
     selected_seats = session.get('seats')
     flightid = ticket_info.get('flightid')
@@ -89,7 +87,16 @@ def check_booking_exists(flightid=None, userid=None):
            return True
     return False
 
-
+def check_valid_ticket(takeofftime=None):
+    # takeofftime = datetime.strptime(takeofftime, '%Y-%m-%d %H:%M:%S')
+    current_time = datetime.now()
+    # lấy thời gian khởi hành của chuyến bay - 4 ra thời gian dc phép bán vé
+    rule = dao.get_rule_by_id(id='10')
+    cut_off_time = takeofftime - timedelta(hours=rule.value)
+    # so sánh nếu thời gian hiện tại nhỏ hơn thời gian dc phép bán => ko đc bán vé
+    if current_time <= cut_off_time:
+        return True
+    return False
 def check_valid_time(takeofftime=None):
     takeofftime = datetime.strptime(takeofftime, '%Y-%m-%d %H:%M:%S')
     current_time = datetime.now()
@@ -124,6 +131,17 @@ def send_ticket_email(ticket_info):
     # Tạo nội dung email với bảng thông tin vé
     msg.html = f"""
     <h3>Chúc mừng bạn đã đặt vé thành công!</h3>
+    <table border="1" style="border-collapse: collapse; width: 100%;">
+        <tr>
+            <th>Thông Tin</th>
+            <th>Giá Trị</th>
+        </tr>
+        <tr>
+            <td>{ticket_info.get('customername')}</td>
+            <td>{ticket_info.get('customername')}</td>
+        </tr>
+       
+    </table>
     <p>Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi!</p>
     """
     # Gửi email
