@@ -3,8 +3,7 @@ import urllib
 from datetime import datetime
 from flask_login import login_user, current_user
 from app import db
-from app.models import Flight, Route, Airport, Customer, User, UserRoleEnum, FareClass, Plane, Seat, Ticket, \
-    Comment,Rule
+from app.models import Flight, Route, Airport, Customer, User, UserRoleEnum, FareClass, Plane, Seat, Ticket,Comment,Rule
 import hashlib
 import cloudinary.uploader
 def load_route(route_id = None):
